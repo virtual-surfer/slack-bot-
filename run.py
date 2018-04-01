@@ -2,16 +2,18 @@ from slackbot.bot import Bot
 from slackbot.bot import respond_to
 from slackbot.bot import listen_to
 import re
+from datetime import datetime
+
+@respond_to('今何時?')
+def now(message):
+    strftime = datetime.now().strftime("%Y/%m/%d %H時%M分%秒っすね")
+    message.reply(strftime)
 
 @respond_to('hi', re.IGNORECASE)
 def hi(message):
     message.reply('I can understand hi or HI!')
     # react with thumb up emoji
     message.react('+1')
-
-@respond_to('xxx')
-def love(message):
-    message.reply('xxx')
 
 @listen_to('Can someone help me?')
 def help(message):
