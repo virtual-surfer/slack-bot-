@@ -12,7 +12,7 @@ def search_tweet(message, word):
     auth = tweepy.OAuthHandler(os.environ['CONSUMER_KEY'], os.environ['CONSUMER_SECRET'])
     auth.set_access_token(os.environ['ACCESS_TOKEN'], os.environ['ACCESS_TOKEN_SECRET'])
     api = tweepy.API(auth)
-    global post_text
+    post_text = ""
     message.send(word + 'でtweet検索するね...')
     search_results = api.search(q=word, lang='ja', result_type='recent', count=3)
     for result in search_results:
