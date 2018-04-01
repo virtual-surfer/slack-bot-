@@ -3,12 +3,12 @@ from slackbot.bot import respond_to
 from slackbot.bot import listen_to
 import re
 
-def main():
-    bot = Bot()
-    bot.run()
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     bot = Bot()
+#     bot.run()
+#
+# if __name__ == "__main__":
+#     main()
 
 @respond_to('hi', re.IGNORECASE)
 def hi(message):
