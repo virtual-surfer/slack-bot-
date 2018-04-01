@@ -16,9 +16,6 @@ def search_tweet(message, word):
     search_results = api.search(q=word, lang='ja', result_type='recent', count=100)
     # 検索結果を辞書{検索結果, いいね数}に詰めていく
     result_dictionary = {}
-    if search_results.length == 0:
-        message.send('ツイート見つからなかったす！')
-        return
     for result in search_results:
         user = result.user
         favorite_count = result.favorite_count
