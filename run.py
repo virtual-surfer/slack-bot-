@@ -14,7 +14,7 @@ def coingecko_screenshot(message):
     COING_EMAIL_ADDRESS = os.environ['COING_EMAIL_ADDRESS']
     COING_PASSWORD = os.environ['COING_PASSWORD']
     message.send("ここまでくる")
-    driver = webdriver.PhantomJS(executable_path='./phantomjs')
+    driver = webdriver.PhantomJS(executable_path='<path/to/phantomjs>')
     message.send("こここない")
     driver.get('https://www.coingecko.com/account/sign_in')
     input_element_email = driver.find_element_by_id('user_email')
