@@ -28,14 +28,14 @@ def coingecko_screenshot(message):
 
     # ページ読込み時間を加味して5秒待ち、スクリーンショットを保存して、画像をpostします。
     time.sleep(5)
-    filename = 'screenShot.jpg'
+    filename = 'screenShot.png'
     driver.save_screenshot(filename)
     img = Image.open(filename).convert('RGB')
     output = BytesIO()
-    img.save(output, 'jpeg')
+    img.save(output, 'png')
     image_obj = Image.open(BytesIO(output.getvalue()), 'r')
     message.send(files={
-        'file': (filename, image_obj, 'image/jpeg')
+        'file': (filename, image_obj, 'image/png')
     })
 
 
