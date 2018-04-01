@@ -24,7 +24,7 @@ def search_tweet(message, word):
         result_dictionary.setdefault(result_text, result.favorite_count)
     # いいね数が多い(valueの降順)ものからユーザー情報とつぶやき文章を取得
     loop_count = 0
-    for k, v in sorted(result_dictionary.items(), key=lambda x: x[1]):
+    for k, v in sorted(result_dictionary.items(), key=lambda x: -x[1]):
         loop_count += 1
         post_text = post_text + '-------------------------------------------------------' + k
         # 5個分のツイートが取れたらループ中断
