@@ -26,9 +26,9 @@ def coingecko_screenshot(message):
     input_element_password.send_keys(COING_PASSWORD)
     send_button.click()
 
-    # ページ読込み時間を加味して5秒待ち、スクリーンショットを保存して、画像をpostします。
+    # ページが完全に読み込まれるまでの時間を加味して最大10秒間待ち、スクリーンショットを保存して、画像をpost。
     message.send("ダッシュボード読み込み中...ちょっと待ってくだせえ...")
-    time.sleep(8)
+    driver.set_page_load_timeout(10)
     driver.save_screenshot('screenShot.jpeg')
     files = {'file': open('./screenShot.jpeg', 'rb')}
     slackapi_params = {
