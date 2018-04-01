@@ -1,7 +1,6 @@
 # coding=utf-8
 from slackbot.bot import Bot
 from slackbot.bot import respond_to
-import re
 import tweepy
 import os
 
