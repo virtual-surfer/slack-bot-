@@ -3,13 +3,6 @@ from slackbot.bot import respond_to
 from slackbot.bot import listen_to
 import re
 
-def main():
-    bot = Bot()
-    bot.run()
-
-if __name__ == "__main__":
-    main()
-
 @respond_to('hi', re.IGNORECASE)
 def hi(message):
     message.reply('I can understand hi or HI!')
@@ -30,3 +23,10 @@ def help(message):
 
     # Start a thread on the original message
     message.reply("Here's a threaded reply", in_thread=True)
+
+def main():
+    bot = Bot()
+    bot.run()
+
+if __name__ == "__main__":
+    main()
