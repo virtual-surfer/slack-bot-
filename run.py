@@ -4,16 +4,16 @@ from slackbot.bot import respond_to
 import re
 import tweepy
 
-# twitterのアクセス情報
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-api = tweepy.API(auth)
-
 
 @respond_to('searchTweet (.*)')
 def search_tweet(message, word):
-    message.send(word + 'でtweet検索するね...')
+    message.send('CONSUMER_KEYとか探す...')
+    # twitterのアクセス情報
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+    api = tweepy.API(auth)
     global post_text
+    message.send(word + 'でtweet検索するね...')
     search_results = api.search(q=word, lang='ja', result_type='recent', count=3)
     for result in search_results:
         message.send('tweet検索結果見つかったからまとめる...')
