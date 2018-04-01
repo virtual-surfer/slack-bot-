@@ -12,8 +12,27 @@ import requests
 
 url_slackapi = 'https://slack.com/api/files.upload'
 
-@respond_to('coinScreen')
-def coingecko_screenshot(message):
+@respond_to('coinScreenD')
+def coingecko_screenshot_dashboard(message):
+    login_coingecko()
+    # スクリーンショットを保存して、画像をpost。
+    message.send("ダッシュボード読み込み中...")
+    driver.save_screenshot('screenShot.png')
+    post_file('./screenShot.png')
+
+
+@respond_to('coinScreenH')
+def coingecko_screenshot_home(message):
+    login_coingecko()
+    # ページが完全に読み込まれるまでの時間を加味して最大5秒間待ち、スクリーンショットを保存して、画像をpost。
+    message.send("ダッシュボード読み込み中...ちょっと待ってくだせえ...")
+    driver.find_element_by_class_name('main-logo').get_attribute('href').click()
+    driver.set_page_load_timeout(5)
+    driver.save_screenshot('screenShot.png')
+    post_file('./screenShot.png')
+
+
+def login_coingecko():
     # Coingeckoにログインするためのメアド、パスワードを取得して、ログインします。
     COING_EMAIL_ADDRESS = os.environ['COING_EMAIL_ADDRESS']
     COING_PASSWORD = os.environ['COING_PASSWORD']
@@ -27,11 +46,9 @@ def coingecko_screenshot(message):
     input_element_password.send_keys(COING_PASSWORD)
     send_button.click()
 
-    # ページが完全に読み込まれるまでの時間を加味して最大5秒間待ち、スクリーンショットを保存して、画像をpost。
-    message.send("ダッシュボード読み込み中...ちょっと待ってくだせえ...")
-    driver.set_page_load_timeout(5)
-    driver.save_screenshot('screenShot.png')
-    files = {'file': open('./screenShot.png', 'rb')}
+
+def post_file(file_path):
+    files = {'file': open(file_path, 'rb')}
     slackapi_params = {
         'token': os.environ['SLACKBOT_API_TOKEN'],
         'channels': 'general'
