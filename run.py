@@ -1,34 +1,28 @@
+# coding=utf-8
 from slackbot.bot import Bot
 from slackbot.bot import respond_to
-from slackbot.bot import listen_to
 import re
-from datetime import datetime
+import tweepy
 
-@respond_to('今何時?')
-def now(message):
-    strftime = datetime.now().strftime("%Y/%m/%d %H時%M分%S秒っすね")
-    message.reply(strftime)
+# twitterのアクセス情報
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+api = tweepy.API(auth)
 
-@respond_to('hi', re.IGNORECASE)
-def hi(message):
-    message.reply('I can understand hi or HI!')
-    # react with thumb up emoji
-    message.react('+1')
-
-@listen_to('Can someone help me?')
-def help(message):
-    # Message is replied to the sender (prefixed with @user)
-    message.reply('Yes, I can!')
-
-    # Message is sent on the channel
-    message.send('I can help everybody!')
-
-    # Start a thread on the original message
-    message.reply("Here's a threaded reply", in_thread=True)
+@respond_to('searchTweet (.*)')
+def search_tweet(message, word):
+    global post_text
+    search_results = api.search(q=word, lang='ja', result_type='recent', count=3)
+    for result in search_results:
+        user_name_formatted = result.user.name + "@(" + result.user.screen_name + ")"
+        text = result.text
+        post_text = post_text + user_name_formatted + "\n" + text + "\n\n"
+    message.send('こんなツイート見つかりましたわ。\n' + post_text)
 
 def main():
     bot = Bot()
     bot.run()
+
 
 if __name__ == "__main__":
     main()
