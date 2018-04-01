@@ -27,15 +27,10 @@ def coingecko_screenshot(message):
     send_button.click()
 
     # ページ読込み時間を加味して5秒待ち、スクリーンショットを保存して、画像をpostします。
-    time.sleep(5)
+    message.send("ダッシュボード読み込み中...ちょっと待ってくだせえ...")
+    time.sleep(8)
     driver.save_screenshot('screenShot.jpeg')
-
-    # output = BytesIO()
-    # img = Image.open(filename).tobytes()
-    # image_obj = Image.open(BytesIO(img), 'r')
-    # image_obj.save(output, 'jpeg')
     files = {'file': open('./screenShot.jpeg', 'rb')}
-
     slackapi_params = {
         'token': os.environ['SLACKBOT_API_TOKEN'],
         'channels': 'general'
