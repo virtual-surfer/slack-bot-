@@ -6,6 +6,7 @@ from selenium.webdriver.common.keys import Keys
 import os
 from PIL import Image
 from io import BytesIO
+import time
 
 
 @respond_to('coinScreen')
