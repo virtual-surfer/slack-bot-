@@ -3,7 +3,7 @@ from slackbot.bot import Bot
 from slackbot.bot import respond_to
 import re
 import tweepy
-
+import os
 
 @respond_to('searchTweet (.*)')
 def search_tweet(message, word):
