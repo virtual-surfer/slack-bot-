@@ -16,9 +16,9 @@ def hi(message):
     # react with thumb up emoji
     message.react('+1')
 
-@respond_to('I love you')
+@respond_to('xxx')
 def love(message):
-    message.reply('I love you too!')
+    message.reply('xxx')
 
 @listen_to('Can someone help me?')
 def help(message):
