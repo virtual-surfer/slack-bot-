@@ -28,20 +28,19 @@ def coingecko_screenshot(message):
 
     # ページ読込み時間を加味して5秒待ち、スクリーンショットを保存して、画像をpostします。
     time.sleep(5)
-    filename = 'screenShot.jpeg'
-    driver.save_screenshot(filename)
+    driver.save_screenshot('screenShot.jpeg')
 
-    output = BytesIO()
-    img = Image.open(filename).tobytes()
-    image_obj = Image.open(BytesIO(img), 'r')
-    image_obj.save(output, 'jpeg')
+    # output = BytesIO()
+    # img = Image.open(filename).tobytes()
+    # image_obj = Image.open(BytesIO(img), 'r')
+    # image_obj.save(output, 'jpeg')
+    files = {'file': open('./screenShot.jpeg', 'rb')}
 
     slackapi_params = {
         'token': os.environ['SLACKBOT_API_TOKEN'],
         'channels': 'general'
     }
-    requests.post(url_slackapi, data=slackapi_params, files={
-        'file': (filename, output.getvalue(), 'image/jpeg')})
+    requests.post(url_slackapi, data=slackapi_params, files=files)
 
 
 @respond_to('searchTweet (.*)')
