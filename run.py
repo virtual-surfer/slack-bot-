@@ -19,7 +19,7 @@ def search_tweet(message, word):
     result_dictionary = {}
     for result in search_results:
         user = result.user
-        tweet_link = 'https://twitter.com/' + user.screen_name + '/status/' + result.id
+        tweet_link = 'https://twitter.com/' + user.screen_name + '/status/' + str(result.id)
         result_text = "\n" + user.name + "@(" + user.screen_name + ")" + "\n" + result.text + "\n" + tweet_link + "\n"
         result_dictionary.setdefault(result_text, result.favorite_count)
     # いいね数が多い(valueの降順)ものからユーザー情報とつぶやき文章を取得
