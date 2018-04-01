@@ -7,17 +7,17 @@ import os
 from PIL import Image
 from io import BytesIO
 import time
+import requests
 
+url_slackapi = 'https://slack.com/api/files.upload'
 
 @respond_to('coinScreen')
-def coingecko_screenshot(message):
+def coingecko_screenshot():
     # Coingeckoにログインするためのメアド、パスワードを取得して、ログインします。
     COING_EMAIL_ADDRESS = os.environ['COING_EMAIL_ADDRESS']
     COING_PASSWORD = os.environ['COING_PASSWORD']
-    message.send("ここまでくる")
     # driver = webdriver.PhantomJS(executable_path='./vendor/')
     driver = webdriver.PhantomJS()
-    message.send("こここない")
     driver.get('https://www.coingecko.com/account/sign_in')
     input_element_email = driver.find_element_by_id('user_email')
     input_element_password = driver.find_element_by_id('user_password')
@@ -34,9 +34,12 @@ def coingecko_screenshot(message):
     output = BytesIO()
     img.save(output, 'png')
     image_obj = Image.open(BytesIO(output.getvalue()), 'r')
-    message.send(files={
-        'file': (filename, image_obj, 'image/png')
-    })
+    slackapi_params = {
+        'token': os.environ['SLACKBOT_API_TOKEN'],
+        'channels': 'general'
+    }
+    requests.post(url_slackapi, data=slackapi_params, files={
+        'file': (filename, image_obj, 'image/png')})
 
 
 @respond_to('searchTweet (.*)')
