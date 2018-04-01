@@ -2,6 +2,7 @@
 from slackbot.bot import Bot
 from slackbot.bot import respond_to
 from selenium import webdriver
+import tweepy
 from selenium.webdriver.common.keys import Keys
 import os
 from PIL import Image
@@ -26,10 +27,8 @@ def coingecko_screenshot(message):
     input_element_password.send_keys(COING_PASSWORD)
     send_button.click()
 
-    # ページが完全に読み込まれるまでの時間を加味して最大10秒間待ち、スクリーンショットを保存して、画像をpost。
+    # ページが完全に読み込まれるまでの時間を加味して最大5秒間待ち、スクリーンショットを保存して、画像をpost。
     message.send("ダッシュボード読み込み中...ちょっと待ってくだせえ...")
-    driver.set_page_load_timeout(5)
-    driver.find_element_by_class_name('pagination').click()
     driver.set_page_load_timeout(5)
     driver.save_screenshot('screenShot.png')
     files = {'file': open('./screenShot.png', 'rb')}
