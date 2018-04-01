@@ -34,7 +34,6 @@ def search_tweet(message, word):
         if loop_count >= 5:
             break
     message.send(post_text)
-    return
 
 
 def main():
