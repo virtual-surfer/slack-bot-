@@ -13,8 +13,9 @@ def coingecko_screenshot(message):
     # Coingeckoにログインするためのメアド、パスワードを取得して、ログインします。
     COING_EMAIL_ADDRESS = os.environ['COING_EMAIL_ADDRESS']
     COING_PASSWORD = os.environ['COING_PASSWORD']
-
+    message.send("ここまでくる")
     driver = webdriver.PhantomJS()
+    message.send("こここない")
     driver.get('https://www.coingecko.com/account/sign_in')
     input_element_email = driver.find_element_by_id('user_email')
     input_element_password = driver.find_element_by_id('user_password')
@@ -31,8 +32,7 @@ def coingecko_screenshot(message):
     output = BytesIO()
     image_obj = Image.open(BytesIO(img), 'r')
     image_obj.save(output, 'jpeg')
-    message.send(post_text)
-    requests.post(files={
+    message.send(files={
         'file': (filename, output.getvalue(), 'image/jpeg')
     })
 
