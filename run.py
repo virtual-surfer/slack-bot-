@@ -12,7 +12,7 @@ import requests
 url_slackapi = 'https://slack.com/api/files.upload'
 
 @respond_to('coinScreen')
-def coingecko_screenshot():
+def coingecko_screenshot(message):
     # Coingeckoにログインするためのメアド、パスワードを取得して、ログインします。
     COING_EMAIL_ADDRESS = os.environ['COING_EMAIL_ADDRESS']
     COING_PASSWORD = os.environ['COING_PASSWORD']
