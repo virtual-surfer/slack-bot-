@@ -20,7 +20,7 @@ def search_tweet(message, word):
         user = result.user
         favorite_count = result.favorite_count
         tweet_link = 'https://twitter.com/' + user.screen_name + '/status/' + str(result.id)
-        result_text = '\n' + user.name + '@(' + user.screen_name + ')\n' + result.text + '\n(' + favorite_count + 'いいね)' +tweet_link + '\n'
+        result_text = '\n' + user.name + '@(' + user.screen_name + ')\n' + result.text + '\n(' + str(favorite_count) + 'いいね)' +tweet_link + '\n'
         result_dictionary.setdefault(result_text, result.favorite_count)
     # いいね数が多い(valueの降順)ものからユーザー情報とつぶやき文章を取得
     loop_count = 0
