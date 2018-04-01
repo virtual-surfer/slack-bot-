@@ -15,9 +15,9 @@ url_slackapi = 'https://slack.com/api/files.upload'
 @respond_to('coinScreenD')
 def coingecko_screenshot_dashboard(message):
     login_coingecko()
-    # スクリーンショットを保存して、画像をpost。
-    driver = webdriver.PhantomJS()
-    message.send("ダッシュボード読み込み中...")
+    # ページが完全に読み込まれるまでの時間を加味して最大5秒間待ち、スクリーンショットを保存して、画像をpost。
+    message.send("ダッシュボード読み込み中...ちょっと待ってくだせえ...")
+    driver.set_page_load_timeout(5)
     driver.save_screenshot('screenShot.png')
     post_file('./screenShot.png')
 
