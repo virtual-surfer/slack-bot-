@@ -6,7 +6,7 @@ from datetime import datetime
 
 @respond_to('今何時?')
 def now(message):
-    strftime = datetime.now().strftime("%Y/%m/%d %H時%M分%秒っすね")
+    strftime = datetime.now().strftime("%Y/%m/%d %H時%M分%S秒っすね")
     message.reply(strftime)
 
 @respond_to('hi', re.IGNORECASE)
