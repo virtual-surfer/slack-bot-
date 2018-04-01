@@ -32,8 +32,8 @@ def coingecko_screenshot(message):
     driver.save_screenshot(filename)
 
     output = BytesIO()
-    img = Image.open(filename).convert('RGB')
-    image_obj = Image.open(BytesIO(img.getbytes()), 'r')
+    img = Image.open(filename).convert('RGB').tobytes()
+    image_obj = Image.open(BytesIO(img), 'r')
     image_obj.save(output, 'jpeg')
 
     slackapi_params = {
