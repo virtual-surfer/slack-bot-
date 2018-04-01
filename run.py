@@ -22,18 +22,6 @@ def coingecko_screenshot_dashboard(message):
     post_file('./screenShot.png')
 
 
-@respond_to('coinScreenH')
-def coingecko_screenshot_home(message):
-    login_coingecko()
-    # ページが完全に読み込まれるまでの時間を加味して最大5秒間待ち、スクリーンショットを保存して、画像をpost。
-    driver = webdriver.PhantomJS()
-    message.send("ダッシュボード読み込み中...ちょっと待ってくだせえ...")
-    driver.find_element_by_class_name('main-logo').get_attribute('href').click()
-    driver.set_page_load_timeout(5)
-    driver.save_screenshot('screenShot.png')
-    post_file('./screenShot.png')
-
-
 def login_coingecko():
     # Coingeckoにログインするためのメアド、パスワードを取得して、ログインします。
     COING_EMAIL_ADDRESS = os.environ['COING_EMAIL_ADDRESS']
