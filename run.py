@@ -31,8 +31,8 @@ def coingecko_screenshot(message):
     driver.set_page_load_timeout(5)
     driver.find_element_by_class_name('pagination').click()
     driver.set_page_load_timeout(5)
-    driver.save_screenshot('screenShot.jpeg')
-    files = {'file': open('./screenShot.jpeg', 'rb')}
+    driver.save_screenshot('screenShot.png')
+    files = {'file': open('./screenShot.png', 'rb')}
     slackapi_params = {
         'token': os.environ['SLACKBOT_API_TOKEN'],
         'channels': 'general'
