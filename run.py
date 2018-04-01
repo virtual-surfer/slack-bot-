@@ -32,10 +32,10 @@ def coingecko_screenshot(message):
     driver.save_screenshot(filename)
     img = Image.open(filename)
     output = BytesIO()
-    img.save(output, 'jpeg')
+    img.save(output, 'RGBA')
     image_obj = Image.open(BytesIO(output.getvalue()), 'r')
     message.send(files={
-        'file': (filename, image_obj, 'image/jpeg')
+        'file': (filename, image_obj, 'image/RGBA')
     })
 
 
