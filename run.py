@@ -30,7 +30,7 @@ def coingecko_screenshot(message):
     time.sleep(5)
     filename = 'screenShot.jpg'
     driver.save_screenshot(filename)
-    img = Image.open(filename)
+    img = Image.open(filename).convert('RGB')
     output = BytesIO()
     img.save(output, 'jpeg')
     image_obj = Image.open(BytesIO(output.getvalue()), 'r')
