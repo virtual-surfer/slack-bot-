@@ -18,15 +18,13 @@ def search_tweet(message, word):
     # 検索結果を辞書{検索結果, いいね数}に詰めていく
     result_dictionary = {}
     for result in search_results:
-        result_dictionary.setdefault(result, result.favorite_count)
+        result_text = "\n" + result.user.name + "@(" + result.user.screen_name + ")" + "\n" + result.text + "\n"
+        result_dictionary.setdefault(result_text, result.favorite_count)
     # いいね数が多い(valueの降順)ものからユーザー情報とつぶやき文章を取得
     loop_count = 0
     for k, v in sorted(result_dictionary.items(), key=lambda x: -x[1]):
         loop_count += 1
-        user_name_formatted = v.user.name + "@(" + v.user.screen_name + ")"
-        text = v.text
-        post_text = post_text + "-------------------------------------------------------"
-        post_text = post_text + user_name_formatted + "\n" + text + "\n\n"
+        post_text = post_text + "-------------------------------------------------------" + k
         # 3個分のツイートが取れたらループ中断
         if loop_count >= 3:
             break
