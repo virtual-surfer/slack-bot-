@@ -12,7 +12,7 @@ def search_tweet(message, word):
     auth.set_access_token(os.environ['ACCESS_TOKEN'], os.environ['ACCESS_TOKEN_SECRET'])
     api = tweepy.API(auth)
     post_text = ''
-    message.send('「' + word + '」でtweet検索するす...')
+    message.send('「' + word + '」でtweet検索するね...')
     search_results = api.search(q=word, lang='ja', result_type='recent', count=100)
     # 検索結果を辞書{検索結果, いいね数}に詰めていく
     result_dictionary = {}
@@ -30,7 +30,7 @@ def search_tweet(message, word):
         # 5個分のツイートが取れたらループ中断
         if loop_count >= 5:
             break
-    message.send('こんなツイート見つかったす！\n' + post_text)
+    message.send(post_text)
     return
 
 
