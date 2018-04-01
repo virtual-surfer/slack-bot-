@@ -11,5 +11,4 @@ if __name__ == "__main__":
 
 @respond_to('今何時？')
 def today(message):
-    strftime = datetime.now().strftime("%Y/%m/%d %H時%M分%秒っすね")
-    message.reply(strftime)
+    message.reply('a')
