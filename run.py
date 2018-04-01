@@ -1,8 +1,39 @@
 # coding=utf-8
 from slackbot.bot import Bot
 from slackbot.bot import respond_to
-import tweepy
+from selenium import webdriver
 import os
+from PIL import Image
+from io import BytesIO
+
+
+@respond_to('coinScreen')
+def coingecko_screenshot(message):
+    # Coingeckoにログインするためのメアド、パスワードを取得して、ログインします。
+    COING_EMAIL_ADDRESS = os.environ['COING_EMAIL_ADDRESS']
+    COING_PASSWORD = os.environ['COING_PASSWORD']
+
+    driver = webdriver.PhantomJS()
+    driver.get('https://www.coingecko.com/account/sign_in')
+    input_element_email = driver.find_element_by_id('user_email')
+    input_element_password = driver.find_element_by_id('user_password')
+    send_button = driver.find_element_by_name('commit')
+    input_element_email.send_keys(COING_EMAIL_ADDRESS)
+    input_element_password.send_keys(COING_PASSWORD)
+    send_button.click()
+
+    # ページ読込み時間を加味して5秒待ち、スクリーンショットを保存して、画像をpostします。
+    time.sleep(5)
+    filename = 'screenShot.png'
+    driver.save_screenshot(filename)
+    img = Image.open(filename)
+    output = BytesIO()
+    image_obj = Image.open(BytesIO(img), 'r')
+    image_obj.save(output, 'jpeg')
+    message.send(post_text)
+    requests.post(files={
+        'file': (filename, output.getvalue(), 'image/jpeg')
+    })
 
 
 @respond_to('searchTweet (.*)')
@@ -20,7 +51,8 @@ def search_tweet(message, word):
         user = result.user
         favorite_count = result.favorite_count
         tweet_link = 'https://twitter.com/' + user.screen_name + '/status/' + str(result.id)
-        result_text = '\n' + user.name + '@(' + user.screen_name + ')\n' + result.text + '\n(' + str(favorite_count) + 'いいね)' +tweet_link + '\n'
+        result_text = '\n' + user.name + '@(' + user.screen_name + ')\n' + result.text + '\n(' + str(
+            favorite_count) + 'いいね)' + tweet_link + '\n'
         result_dictionary.setdefault(result_text, result.favorite_count)
     if len(result_dictionary) == 0:
         message.send('ツイート見つからなかったす。')
