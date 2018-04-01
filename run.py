@@ -30,16 +30,18 @@ def coingecko_screenshot(message):
     time.sleep(5)
     filename = 'screenShot.jpeg'
     driver.save_screenshot(filename)
-    img = Image.open(filename).convert('RGB')
+
     output = BytesIO()
-    img.save(output, 'jpeg')
-    image_obj = Image.open(BytesIO(output.getvalue()), 'r')
+    img = Image.open(filename).convert('RGB')
+    image_obj = Image.open(BytesIO(img), 'r')
+    image_obj.save(output, 'jpeg')
+
     slackapi_params = {
         'token': os.environ['SLACKBOT_API_TOKEN'],
         'channels': 'general'
     }
     requests.post(url_slackapi, data=slackapi_params, files={
-        'file': (filename, image_obj, 'image/jpeg')})
+        'file': (filename, output.getvalue(), 'image/jpeg')})
 
 
 @respond_to('searchTweet (.*)')
