@@ -27,8 +27,8 @@ def search_tweet(message, word):
     for k, v in sorted(result_dictionary.items(), key=lambda x: -x[1]):
         loop_count += 1
         post_text = post_text + "-------------------------------------------------------" + k
-        # 3個分のツイートが取れたらループ中断
-        if loop_count >= 3:
+        # 5個分のツイートが取れたらループ中断
+        if loop_count >= 5:
             break
     message.send('こんなツイート見つかりましたわ。\n' + post_text)
 
