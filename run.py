@@ -2,6 +2,7 @@
 from slackbot.bot import Bot
 from slackbot.bot import respond_to
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import os
 from PIL import Image
 from io import BytesIO
