@@ -1,6 +1,7 @@
 # coding=utf-8
 from slackbot.bot import Bot
 from slackbot.bot import respond_to
+from slackbot.bot import default_reply
 from selenium import webdriver
 import tweepy
 from selenium.webdriver.common.keys import Keys
