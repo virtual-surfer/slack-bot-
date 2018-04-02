@@ -12,6 +12,22 @@ import requests
 
 url_slackapi = 'https://slack.com/api/files.upload'
 
+@default_reply(matchstr='(.*)')
+def talk(message, input):
+    url = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=' + os.environ['DOCOMO_API_KEY']
+    headers = {'Content-type': 'application/json'}
+    data = {
+        'utt': input,
+        'mode': 'dialog',
+        'place': '東京'
+    }
+    response = requests.post(
+        url,
+        data=json.dumps(data),
+        headers=headers
+    ).json()
+    message.reply(response.get(utt))
+
 @respond_to('coinScreenD')
 def coingecko_screenshot_dashboard(message):
     # Coingeckoにログインするためのメアド、パスワードを取得して、ログインします。
