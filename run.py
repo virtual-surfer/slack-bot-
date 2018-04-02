@@ -10,8 +10,10 @@ from PIL import Image
 from io import BytesIO
 import time
 import requests
+import json
 
 url_slackapi = 'https://slack.com/api/files.upload'
+
 
 @default_reply(matchstr='(.*)')
 def talk(message, input):
@@ -28,6 +30,7 @@ def talk(message, input):
         headers=headers
     ).json()
     message.reply(response.get(utt))
+
 
 @respond_to('coinScreenD')
 def coingecko_screenshot_dashboard(message):
