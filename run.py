@@ -13,14 +13,17 @@ import requests
 import json
 
 url_slackapi = 'https://slack.com/api/files.upload'
+context = {}
 
 
 @default_reply(matchstr='(.*)')
 def talk(message, input):
+    global context
     url = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=' + os.environ['DOCOMO_API_KEY']
     headers = {'Content-type': 'application/json'}
     data = {
         'utt': input,
+        'context': context.get(),
         'mode': 'dialog',
         'place': '東京'
     }
@@ -29,6 +32,7 @@ def talk(message, input):
         data=json.dumps(data),
         headers=headers
     ).json()
+    context = response['context']
     message.reply(response.get('utt'))
 
 
