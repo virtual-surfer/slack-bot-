@@ -29,7 +29,7 @@ def talk(message, input):
         data=json.dumps(data),
         headers=headers
     ).json()
-    message.reply(response.get(utt))
+    message.reply(response.get('utt'))
 
 
 @respond_to('coinScreenD')
