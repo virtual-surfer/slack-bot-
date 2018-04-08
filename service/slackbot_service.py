@@ -5,7 +5,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-from service import twitter_service, common_service, docomo_dialogue_service
+import twitter_service, common_service, docomo_dialogue_service
 
 
 def dialogue_with_docomo_api(message, input):
@@ -91,7 +91,7 @@ def post_text(channel, text):
     url_slack_api = 'https://slack.com/api/chat.postMessage'
     slack_api_params = {
         'token': os.environ['SLACKBOT_API_TOKEN'],
-        'channels': channel,
+        'channel': channel,
         'text': text,  # 投稿するテキスト
         'username': 'surfer-bot',  # 投稿のユーザー名
         'icon_emoji': ':sunglasses:',  # 投稿のプロフィール画像に入れる絵文字

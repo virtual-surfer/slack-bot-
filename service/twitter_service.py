@@ -12,9 +12,10 @@ def prepare_twitter_api():
     return tweepy.API(auth)
 
 
-def search_tweet(api, word,result_type, count):
+def search_tweet(api, word, result_type, count):
     """
     Twitterでwordで一致する日本語つぶやき情報を取得
+    result_type: popular->人気のツイート。recent->最新のツイート。mixed->全てのツイート。
     """
     search_results = api.search(q=word, lang='ja', result_type=result_type, count=count)
     return search_results
