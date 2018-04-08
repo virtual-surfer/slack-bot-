@@ -46,12 +46,12 @@ def post_top_tweet(message, word):
         send_to_slack(message, 'ツイート見つからなかったす。')
 
     # いいね数の多い順のつぶやき一覧取得
-    statuses_dictionary = twitter_service.sort_by_favorite_count(statuses, false)
+    statuses = twitter_service.sort_by_favorite_count(search_results, False)
     # いいね数の多い5つのつぶやき辞書取得
-    statuses_dictionary_top_five = common_service.select_dictionary(statuses_dictionary, 5)
-    statuses_top_five = statuses_dictionary_top_five.keys()
+    top_five_statuses_dictionary = twitter_service.select_statuses(statuses, 5)
+    top_five_statuses = top_five_statuses_dictionary.values()
     # slackにポストする形式に整えた文章作成
-    text = twitter_service.create_tweet_list_text(statuses_top_five)
+    text = twitter_service.create_tweet_list_text(top_five_statuses)
 
     send_to_slack(message, text)
 

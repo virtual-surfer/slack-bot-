@@ -1,5 +1,6 @@
 # coding=utf-8
 import tweepy
+import os
 
 
 def prepare_twitter_api():
@@ -41,15 +42,26 @@ def create_tweet_list_text(statuses):
 
 def sort_by_favorite_count(statuses, is_asc):
     """
-    引数で与えられたつぶやきを「いいね」の少ない順で並び替えて返す。(is_ascがfalseなら多い順)
-    statusesが空の場合は空の辞書を返す
+    引数で与えられたつぶやきを「いいね」の少ない順で並び替えてstatusリストを返す。(is_ascがfalseなら多い順)
     """
     # 辞書{つぶやき, いいね数}に詰めていく
-    result_dictionary = {}
-    for status in statuses:
-        favorite_count = status.favorite_count
-        result_dictionary.setdefault(status, favorite_count)
     if is_asc:
-        return sorted(result_dictionary.items(), key=lambda x: x[1])
+        return sorted(statuses, key=lambda status: status.favorite_count, reverse=False)
     else:
-        return sorted(result_dictionary.items(), key=lambda x: -x[1])
+        return sorted(statuses, key=lambda status: status.favorite_count, reverse=True)
+
+
+def select_statuses(statuses, count):
+    """
+    つぶやきの最初のものからcountの数の{id, つぶやき}辞書を取得。(countが0以下の場合は空の辞書を返す)
+    """
+    result_dictionary = {}
+    if count < 1:
+        return result_dictionary
+    loop_count = 0
+    for status in statuses:
+        loop_count += 1
+        result_dictionary.setdefault(loop_count, status)
+        if loop_count >= count:
+            break
+    return result_dictionary

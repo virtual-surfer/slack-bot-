@@ -1,4 +1,6 @@
 # coding=utf-8
+
+
 def select_dictionary(dictionary, count):
     """
     辞書の最初のものからcountの数だけ取得する。(countが0以下の場合は空の辞書を返す)
