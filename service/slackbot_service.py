@@ -44,6 +44,7 @@ def post_top_tweet(message, word):
     search_results = twitter_service.search_tweet(api, word, 'recent', 100)
     if len(search_results) == 0:
         send_to_slack(message, 'ツイート見つからなかったす。')
+        return
 
     # いいね数の多い順のつぶやき一覧取得
     statuses = twitter_service.sort_by_favorite_count(search_results, False)
@@ -81,3 +82,19 @@ def post_file(channel, file_path):
     }
     files = {'file': open(file_path, 'rb')}
     requests.post(url_slack_api, data=slack_api_params, files=files)
+
+
+def post_text(channel, text):
+    """
+    Slackの特定のチャンネルにtextを送信する（未検証メソッド）
+    """
+    url_slack_api = 'https://slack.com/api/chat.postMessage'
+    slack_api_params = {
+        'token': os.environ['SLACKBOT_API_TOKEN'],
+        'channels': channel,
+        'text': text,  # 投稿するテキスト
+        'username': 'surfer-bot',  # 投稿のユーザー名
+        'icon_emoji': ':sunglasses:',  # 投稿のプロフィール画像に入れる絵文字
+        'link_names': 1,  # メンションを有効にする
+    }
+    requests.post(url_slack_api, data=slack_api_params)
