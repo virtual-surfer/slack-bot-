@@ -1,16 +1,11 @@
 # coding=utf-8
-import json
 import os
 import requests
 import time
-from PIL import Image
-from io import BytesIO
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-import twitter_service
-import common_service
-import docomo_dialogue_service
+from service import twitter_service, common_service, docomo_dialogue_service
 
 
 def dialogue_with_docomo_api(message, input):
