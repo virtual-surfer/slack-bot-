@@ -35,6 +35,7 @@ def coingecko_screenshot_dashboard(message):
 
 
 def post_top_tweet(message, word):
+    send_to_slack(message, 'ここ来てる？')
     # twitterのアクセス情報
     api = twitter_service.prepare_twitter_api()
 
