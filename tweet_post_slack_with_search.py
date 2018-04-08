@@ -1,11 +1,11 @@
 # coding=utf-8
-import twitter_service
-import slackbot_service
+from service import twitter_service
+from service import slackbot_service
 
 
 def tweet_post_slack():
     api = twitter_service.prepare_twitter_api()
-    search_results = twitter_service.search_tweet(api, '仮想通貨', 'popular', 100)
+    search_results = twitter_service.search_tweet(api, 'ethereum', 'popular', 100)
     if len(search_results) == 0:
         slackbot_service.send_to_slack(message, 'ツイート見つからなかったす。')
         return
