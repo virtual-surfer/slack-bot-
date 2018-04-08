@@ -5,7 +5,6 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-import common_service
 import docomo_dialogue_service
 import twitter_service
 
