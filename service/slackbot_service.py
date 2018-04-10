@@ -87,15 +87,31 @@ def post_file(channel, file_path):
 
 def post_text(channel, text):
     """
-    Slackの特定のチャンネルにtextを送信する（未検証メソッド）
+    Slackの特定のチャンネル(channel)にtextを送信する
     """
     url_slack_api = 'https://slack.com/api/chat.postMessage'
     slack_api_params = {
         'token': os.environ['SLACKBOT_API_TOKEN'],
         'channel': channel,
         'text': text,  # 投稿するテキスト
-        'username': 'surfer-bot',  # 投稿のユーザー名
-        'icon_emoji': ':sunglasses:',  # 投稿のプロフィール画像に入れる絵文字
+        'link_names': 1,  # メンションを有効にする
+    }
+    requests.post(url_slack_api, data=slack_api_params)
+
+
+def post_text_with_icon(channel, text, name, icon):
+    """
+    Slackの特定のチャンネル(channel)にtextを送信する
+    name: 投稿するユーザーの名前
+    icon: 投稿するユーザーのアイコン画像
+    """
+    url_slack_api = 'https://slack.com/api/chat.postMessage'
+    slack_api_params = {
+        'token': os.environ['SLACKBOT_API_TOKEN'],
+        'channel': channel,
+        'text': text,  # 投稿するテキスト
+        'username': name,  # 投稿のユーザー名
+        'icon_emoji': icon,  # 投稿のプロフィール画像に入れる絵文字
         'link_names': 1,  # メンションを有効にする
     }
     requests.post(url_slack_api, data=slack_api_params)
