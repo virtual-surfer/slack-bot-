@@ -1,6 +1,7 @@
 # coding=utf-8
 import tweepy
 import os
+from repository import twitter_tweet_repository
 
 
 def prepare_twitter_api():
@@ -36,7 +37,8 @@ def create_tweet_list_text(statuses):
         user = status.user
         fav_count = status.favorite_count
         tweet_link = 'https://twitter.com/{}/status/{}'.format(user.screen_name, str(status.id))
-        result_text = '\n{}@({})\n{}\n({}いいね){}\n'.format(user.name, user.screen_name, status.text, str(fav_count), tweet_link)
+        result_text = '\n{}@({})\n{}\n({}いいね){}\n'.format(user.name, user.screen_name, status.text, str(fav_count),
+                                                          tweet_link)
         post_text = '{}-------------------------------------------------------{}'.format(post_text, result_text)
     return post_text
 
@@ -66,3 +68,26 @@ def select_statuses(statuses, count):
         if loop_count >= count:
             break
     return result_dictionary
+
+
+def collect_user_tweet(user_screen_name):
+    """
+    Twitterのuser_screen_name(@taroのtaroの部分)のユーザーのつぶやきをDBに登録します。
+    """
+    for status in search_user_tweet(user_screen_name):
+        user_id = status.user.id
+        tweet_id = status.id
+        tweet_text = status.text
+        tweet_datetime = status.created_at
+        try:
+            twitter_tweet_repository.add_tweet(user_id, tweet_id, tweet_text, tweet_datetime)
+        except:
+            print('何らかのエラー発生')
+
+
+def search_user_tweet(user_screen_name):
+    """
+    Twitterのuser_screen_name(@taroのtaroの部分)のユーザーのつぶやきを200件取得します。
+    """
+    api = prepare_twitter_api()
+    return api.user_timeline(screen_name=user_screen_name, count=200)

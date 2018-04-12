@@ -1,6 +1,7 @@
 from slackbot.bot import default_reply
 from slackbot.bot import respond_to
 from service import slackbot_service
+from service import twitter_service
 
 
 @respond_to('coinScreenD')
@@ -11,6 +12,11 @@ def coingecko_screenshot_dashboard(message):
 @respond_to('searchTweet (.*)')
 def post_top_tweet(message, word):
     slackbot_service.post_top_tweet(message, word)
+
+
+@respond_to('collectTweet (.*)')
+def collect_user_tweet(message, word):
+    twitter_service.collect_user_tweet(word)
 
 
 @default_reply(matchstr='(.*)')
