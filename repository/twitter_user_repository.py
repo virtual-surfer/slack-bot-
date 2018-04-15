@@ -1,14 +1,27 @@
 # coding=utf-8
 from repository import common_repository
 from entity.twitter_user_entity import TwitterUser
+from sqlalchemy import *
+from sqlalchemy.orm import *
+from sqlalchemy.ext.declarative import declarative_base
+
+
+# 取得処理
+def search_user(user_screen_name):
+    # トランザクション開始
+    session = common_repository.create_session()
+    # user_screen_nameからuser_idを取得する
+    user = session.query(TwitterUser).filter(TwitterUser.user_screen_name == user_screen_name).one()
+    session.close()
+    return user
 
 
 # 登録処理
-def add_user(name, screen_name, image_link):
+def add_user(user_id, screen_name, created_at):
     # トランザクション開始
     session = common_repository.create_session()
     # user追加
-    test_user = TwitterUser(user_name=name, user_screen_name=screen_name, profile_image_link=image_link)
+    test_user = TwitterUser(user_id=user_id, user_screen_name=screen_name, created_at=created_at)
     session.add(test_user)
     # 変更をコミット
     session.commit()
@@ -19,7 +32,7 @@ def add_users(users):
     session = common_repository.create_session()
     # bulkで一括user追加
     session.bulk_save_objects(
-        [TwitterUser(user_name=user[0], user_screen_name=user[1], profile_image_link=user[2])
+        [TwitterUser(user_id=user[0], user_screen_name=user[1], profile_image_link=user[2])
          for user in users], return_defaults=True)
     # 変更をコミット
     session.commit()
