@@ -28,7 +28,7 @@ def search_follow(user_screen_name, query, max_count):
             search_results = api.search(q=query, count=100, max_id=max_id)
         for status in search_results:
             print('---------------------------------------')
-            follow_success = follow_target_user(api, user_screen_name, status)
+            follow_success = follow_target_user(user_screen_name, status)
             if follow_success is True:
                 follow_count = follow_count + 1
             print('「{}」人フォローした'.format(str(follow_count)))
