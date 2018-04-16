@@ -1,5 +1,5 @@
 # coding=utf-8
-from service import twitter_service
+from service.twitter import twitter_service
 from service import slackbot_service
 import datetime
 
