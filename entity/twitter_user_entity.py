@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from entity import common_entity
 from entity.twitter_tweet_entity import TwitterTweet
+from entity.twitter_follow_entity import TwitterFollow
 
 MYSQL_USER = os.environ['MYSQL_USER']
 MYSQL_PASSWORD = os.environ['MYSQL_PASSWORD']
@@ -25,3 +26,5 @@ class TwitterUser(Base):
     ins_datetime = Column(DATETIME, default=datetime.now, nullable=False)
     upd_datetime = Column(DATETIME, default=datetime.now, nullable=False)
     twitter_tweets = relationship("TwitterTweet", backref="twitter_user")
+    # twitter_friend_follows = relationship("TwitterFollow", primaryjoin="twitter_user.twitter_user_id==TwitterFollow.friend_id")
+    # twitter_follower_follows = relationship("TwitterFollow", primaryjoin="twitter_user.twitter_user_id==TwitterFollow.follower_id")

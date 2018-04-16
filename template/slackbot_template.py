@@ -26,6 +26,14 @@ def collect_user_tweet(message, user_screen_name):
     twitter_service.search_insert_user(user_screen_name)
 
 
+@respond_to('searchFollow (.*) (.*) (.*)')
+def search_follow(message, user_screen_name, query, max_count):
+    """
+    指定したuser_screen_nameのユーザーで、queryで検索したツイッターユーザーをmax_count数フォローして、DBにフォローデータを登録する。
+    """
+    twitter_service.search_follow(user_screen_name, query, max_count)
+
+
 @respond_to('collectTweet (.*)')
 def collect_user_tweet(message, user_screen_name):
     """
