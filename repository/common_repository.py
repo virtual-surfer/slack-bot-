@@ -10,10 +10,10 @@ from sqlalchemy.orm import sessionmaker
 # MYSQL_DB = os.environ['MYSQL_DB']
 # engine = create_engine('mysql://{user}:{password}@{host}/{db}'
 #                        .format(user=MYSQL_USER, password=MYSQL_PASSWORD, host=MYSQL_HOST, db=MYSQL_DB),
-#                        encoding='utf8mb4', echo=False)
+#                        encoding='utf-8', echo=False)
 
 # HerokuのMySQL接続
-engine = create_engine(os.environ['CLEARDB_DATABASE_URL'], encoding='utf8mb4', echo=False)
+engine = create_engine(os.environ['CLEARDB_DATABASE_URL'], encoding='utf-8', echo=False)
 
 
 def create_session():
