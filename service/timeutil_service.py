@@ -1,6 +1,7 @@
 # coding=utf-8
 import time
 from datetime import datetime
+from datetime import timedelta
 from time import sleep
 
 
@@ -44,6 +45,22 @@ def culc_before_month(month):
     """
     return datetime.fromtimestamp(
         time.mktime((datetime.now().year, datetime.now().month - month, datetime.now().day, 0, 0, 0, 0, 0, 0)))
+
+
+def add_day(day):
+    """
+    :param day: 日数（int）
+    :return: 今から日数後の日付
+    """
+    return datetime.now() + timedelta(days=day)
+
+
+def minus_day(day):
+    """
+    :param day: 日数（int）
+    :return: 今から日数前の日付
+    """
+    return datetime.now() - timedelta(days=day)
 
 
 def sleep_second(second):

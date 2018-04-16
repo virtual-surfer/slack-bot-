@@ -3,7 +3,7 @@ from slackbot.bot import default_reply
 from slackbot.bot import respond_to
 from slackbot.bot import listen_to
 from service import slackbot_service
-from service import twitter_service
+from service.twitter import twitter_service
 
 
 @respond_to('coinScreenD')
@@ -32,6 +32,14 @@ def search_follow(message, user_screen_name, query, max_count):
     指定したuser_screen_nameのユーザーで、queryで検索したツイッターユーザーをmax_count数フォローして、DBにフォローデータを登録する。
     """
     twitter_service.search_follow(user_screen_name, query, max_count)
+
+
+@respond_to('unFollow (.*) (.*)')
+def unfollow(message, user_screen_name, max_count):
+    """
+    指定したuser_screen_nameのユーザーで、max_count数のフォローを外して、DBのフォローデータを更新する。
+    """
+    twitter_service.unfollow(user_screen_name, max_count)
 
 
 @respond_to('collectTweet (.*)')

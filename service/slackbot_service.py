@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 from service import docomo_dialogue_service
-from service import twitter_service
+from service.twitter import twitter_service
 
 
 def dialogue_with_docomo_api(message, input):
