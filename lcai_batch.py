@@ -18,7 +18,7 @@ from service import timeutil_service
 
 # ################## 各種変数(基本的にはここだけ触る) ##################
 
-user_screen_name = 'lcai18chan'
+user_screen_name = 'lcaichan18'
 max_follow_count_every_other_day = 100
 max_unfollow_count_every_other_day = 30
 follow_target_word_list = ['読書', 'ビジネス書', '本好き', 'Amazon', 'タイムセール', 'ブログ', 'Kindle', 'Amazonプライム',
@@ -39,7 +39,7 @@ def execute():
 
     # 10分に1回 TODO:処理増えてきたら->自分にメンションが来ているかを確認してツイートタスクに詰める
     # 「メンションきているものにレスポンス文章作ってツイートする」タスクを1分間に1つぶやきの頻度で返す
-    print('TODO')
+    print('TODO current_hour:{}'.format(current_hour))
 
     current_minute = timeutil_service.current_datetime().minute
     # 定期実行タスクに関しては0分~10分以外はおやすみ（処理しない）
@@ -50,7 +50,7 @@ def execute():
     # done 適当にツイート検索してツイート
     # TODO: DB保存している女子高生のつぶやきでつぶやき時間の近いもの真似して投稿
     if current_hour % 2 == 0 and current_hour != 18 and current_hour != 20:
-        print('TODO')
+        print('TODO2 current_hour:{}'.format(current_hour))
         # ↓精度低いから成長させよう
         # twitter_service.search_unpopular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list))
     # 奇数時間につぶやき
@@ -60,7 +60,7 @@ def execute():
         twitter_service.search_popular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list))
     # 指定時間にセール情報と新着情報
     if current_hour == 11 or current_hour  == 15 or current_hour == 19:
-        print('TODO')
+        print('TODO3 current_hour:{}'.format(current_hour))
 
     today = timeutil_service.current_datetime().day
     # 偶数日(2日に1回)はおやすみ（処理しない）
