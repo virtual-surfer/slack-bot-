@@ -52,6 +52,16 @@ def collect_user_tweet(message, user_screen_name):
     twitter_service.collect_user_tweets(user_screen_name)
 
 
+@respond_to('collectTweetDiff (.*)')
+def collect_user_tweet(message, user_screen_name):
+    """
+    指定したTwitterユーザーのDBにある最新のツイートから新しい順に最大2000件DB登録する
+    :param message: slackで受け取ったメンション
+    :param user_screen_name: TwitterユーザーのアカウントID
+    """
+    twitter_service.collect_user_tweets_diff(user_screen_name)
+
+
 @listen_to('(@.+) (.*)')
 def dialogue_with_twitter_user(message, user_screen_name, text):
     twitter_service.dialogue_with_twitter_user(message, user_screen_name, text)

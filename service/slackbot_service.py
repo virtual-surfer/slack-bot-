@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 
 from service import docomo_dialogue_service
 from service.twitter import twitter_service
+from service.twitter import twitter_common_service
 
 
 def dialogue_with_docomo_api(message, input):
@@ -37,20 +38,20 @@ def coingecko_screenshot_dashboard(message):
 
 def post_top_tweet(message, word):
     # twitterのアクセス情報
-    api = twitter_service.prepare_twitter_api()
+    api = twitter_common_service.prepare_twitter_api()
 
     search_comment = '「{}」でtweet検索するね...'.format(word)
     send_to_slack(message, search_comment)
 
-    search_results = twitter_service.search_tweet(api, word, 'recent', 100)
+    search_results = twitter_common_service.search_tweet(api, word, 'popular', 100)
     if len(search_results) == 0:
         send_to_slack(message, 'ツイート見つからなかったす。')
         return
 
     # いいね数の多い順のつぶやき一覧取得
-    statuses = twitter_service.sort_by_favorite_count(search_results, False)
+    statuses = twitter_common_service.sort_by_favorite_count(search_results, False)
     # いいね数の多い5つのつぶやき辞書取得
-    top_five_statuses_dictionary = twitter_service.select_statuses(statuses, 5)
+    top_five_statuses_dictionary = twitter_common_service.select_statuses(statuses, 5)
     top_five_statuses = top_five_statuses_dictionary.values()
     # slackにポストする形式に整えた文章作成
     text = twitter_service.create_tweet_list_text(top_five_statuses)
