@@ -49,7 +49,7 @@ def post_top_tweet(message, word):
         return
 
     # いいね数の多い順のつぶやき一覧取得
-    statuses = twitter_common_service.sort_by_favorite_count(search_results, False)
+    statuses = twitter_common_service.sort_by_favorite_count(search_results, True)
     # いいね数の多い5つのつぶやき辞書取得
     top_five_statuses_dictionary = twitter_common_service.select_statuses(statuses, 5)
     top_five_statuses = top_five_statuses_dictionary.values()

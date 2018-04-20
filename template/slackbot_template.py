@@ -16,6 +16,11 @@ def post_top_tweet(message, word):
     slackbot_service.post_top_tweet(message, word)
 
 
+@respond_to('tweet (.*) (.*)')
+def search_popular_tweet_and_retweet(message, user_screen_name, query):
+    twitter_service.search_unpopular_tweet_and_tweet(user_screen_name, query)
+
+
 @respond_to('reTweet (.*) (.*)')
 def search_popular_tweet_and_retweet(message, user_screen_name, query):
     twitter_service.search_popular_tweet_and_retweet(user_screen_name, query)

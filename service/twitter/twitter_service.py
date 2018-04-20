@@ -333,7 +333,7 @@ def search_popular_tweet_and_retweet(user_screen_name, query):
         return
 
     # いいね数の多い順のつぶやき一覧取得
-    statuses = twitter_common_service.sort_by_favorite_count(search_results, False)
+    statuses = twitter_common_service.sort_by_favorite_count(search_results, True)
     # いいね数の多い1つのつぶやき取得
     top_status_dictionary = twitter_common_service.select_statuses(statuses, 1)
     for status in top_status_dictionary.values():
@@ -343,3 +343,24 @@ def search_popular_tweet_and_retweet(user_screen_name, query):
         retweet_text = comment + '\n' + tweet_link
         # リツイートする
         api.update_status(status=retweet_text)
+
+
+def search_unpopular_tweet_and_tweet(user_screen_name, query):
+    """
+    user_screen_nameのTwitterユーザーでqueryで話題でないつぶやきを探して真似してツイートする
+    """
+    # twitterのアクセス情報
+    api = twitter_common_service.prepare_twitter_api(user_screen_name)
+    search_results = twitter_common_service.search_tweet(api, query, 'popular', 100)
+
+    if len(search_results) == 0:
+        print('ツイート見つからなかったす。')
+        return
+
+    # いいね数の少ない順のつぶやき一覧取得
+    statuses = twitter_common_service.sort_by_favorite_count(search_results, False)
+    # いいね数の多い1つのつぶやき取得
+    unpopular_status_dictionary = twitter_common_service.select_statuses(statuses, 1)
+    for status in unpopular_status_dictionary.values():
+        # ツイートする
+        api.update_status(status=status.text)

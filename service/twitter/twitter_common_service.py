@@ -73,15 +73,15 @@ def search_user_tweets_fromto(user_screen_name, target_screen_name, since_id, ma
 
 
 # つぶやき情報の並び替え/一部取得
-def sort_by_favorite_count(statuses, is_asc):
+def sort_by_favorite_count(statuses, favorite_sort):
     """
-    引数で与えられたつぶやきを「いいね」の少ない順で並び替えてstatusリストを返す。(is_ascがfalseなら多い順)
+    favorite_sortがTrueなら、引数で与えられたつぶやきを「いいね」の多い順で並び替えてstatusリストを返す。(favorite_sortがfalseなら少ない順)
     """
     # 辞書{つぶやき, いいね数}に詰めていく
-    if is_asc:
-        return sorted(statuses, key=lambda status: status.favorite_count, reverse=False)
-    else:
+    if favorite_sort:
         return sorted(statuses, key=lambda status: status.favorite_count, reverse=True)
+    else:
+        return sorted(statuses, key=lambda status: status.favorite_count, reverse=False)
 
 
 def select_statuses(statuses, count):

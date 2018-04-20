@@ -46,9 +46,13 @@ def execute():
     if 10 < current_minute <= 59:
         return
 
-    # 偶数時間(フォロー処理時間以外)につぶやき(DB保存している女子高生のつぶやきでつぶやき時間の近いもの真似して投稿)
+    # 偶数時間(フォロー処理時間以外)につぶやき
+    # done 適当にツイート検索してツイート
+    # TODO: DB保存している女子高生のつぶやきでつぶやき時間の近いもの真似して投稿
     if current_hour % 2 == 0 and current_hour != 18 and current_hour != 20:
         print('TODO')
+        # ↓精度低いから成長させよう
+        # twitter_service.search_unpopular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list))
     # 奇数時間につぶやき
     # done 適当にツイート検索して引用リツイート
     # TODO: 話題の本に関してのつぶやきの引用リツイート
