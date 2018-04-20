@@ -15,6 +15,11 @@ def create_response_with_context(input):
         'utt': input,
         'context': context.get(context_key, ''),
         'mode': 'dialog',
+        "sex": "女",
+        "nickname": "るかい",
+        "nickname_y": "俺",
+        "age": "18",
+        "constellations": "双子座",
         'place': '東京'
     }
     response = requests.post(

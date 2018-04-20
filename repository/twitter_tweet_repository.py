@@ -8,13 +8,13 @@ from sqlalchemy.sql import func
 from sqlalchemy.sql import desc
 
 
-def search_latest_tweet(user_screen_name):
+def search_latest_tweet(target_screen_name):
     # トランザクション開始
     session = common_repository.create_session()
     # user_screen_nameからuser_idを取得する
-    user = twitter_user_repository.search_user(user_screen_name)
+    user = twitter_user_repository.search_user(target_screen_name)
     if user is None:
-        print('{}はDBに登録されていませんでした'.format(user_screen_name))
+        print('{}はDBに登録されていませんでした'.format(target_screen_name))
         return
     user_id = user.twitter_user_id
     # 最新のツイートを取得する

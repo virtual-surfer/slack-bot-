@@ -16,6 +16,11 @@ def post_top_tweet(message, word):
     slackbot_service.post_top_tweet(message, word)
 
 
+@respond_to('reTweet (.*) (.*)')
+def search_popular_tweet_and_retweet(message, user_screen_name, query):
+    twitter_service.search_popular_tweet_and_retweet(user_screen_name, query)
+
+
 @respond_to('addTwitterUser (.*)')
 def collect_user_tweet(message, user_screen_name):
     """
@@ -42,24 +47,25 @@ def unfollow(message, user_screen_name, max_count):
     twitter_service.unfollow(user_screen_name, max_count)
 
 
-@respond_to('collectTweet (.*)')
-def collect_user_tweet(message, user_screen_name):
+@respond_to('collectTweet (.*) (.*)')
+def collect_user_tweet(message, user_screen_name, target_screen_name):
     """
-    指定したTwitterユーザーの過去のツイートを最大2000件DB登録する
+    指定したuser_screen_nameのTwitterユーザーで、target_screen_nameの過去のツイートを最大2000件DB登録する
     :param message: slackで受け取ったメンション
     :param user_screen_name: TwitterユーザーのアカウントID
     """
-    twitter_service.collect_user_tweets(user_screen_name)
+    twitter_service.collect_user_tweets(user_screen_name, target_screen_name)
 
 
-@respond_to('collectTweetDiff (.*)')
-def collect_user_tweet(message, user_screen_name):
+@respond_to('collectTweetDiff (.*) (.*)')
+def collect_user_tweet(message, user_screen_name, target_screen_name):
     """
     指定したTwitterユーザーのDBにある最新のツイートから新しい順に最大2000件DB登録する
+    :param user_screen_name: 起点となるTwitterユーザーのアカウントID
+    :param target_screen_name: 対象となるユーザーのアカウントID
     :param message: slackで受け取ったメンション
-    :param user_screen_name: TwitterユーザーのアカウントID
     """
-    twitter_service.collect_user_tweets_diff(user_screen_name)
+    twitter_service.collect_user_tweets_diff(user_screen_name, target_screen_name)
 
 
 @listen_to('(@.+) (.*)')

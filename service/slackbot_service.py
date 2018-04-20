@@ -37,12 +37,12 @@ def coingecko_screenshot_dashboard(message):
 
 
 def post_top_tweet(message, word):
-    # twitterのアクセス情報
-    api = twitter_common_service.prepare_twitter_api()
 
     search_comment = '「{}」でtweet検索するね...'.format(word)
     send_to_slack(message, search_comment)
 
+    # twitterのアクセス情報
+    api = twitter_common_service.prepare_twitter_api('virtual_techX')
     search_results = twitter_common_service.search_tweet(api, word, 'popular', 100)
     if len(search_results) == 0:
         send_to_slack(message, 'ツイート見つからなかったす。')

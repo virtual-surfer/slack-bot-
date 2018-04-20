@@ -16,7 +16,7 @@ def search_follow(user_screen_name, query, max_count):
     """
     指定したuser_screen_nameのユーザーで、queryで検索したツイッターユーザーをmax_count数フォローして、DBにフォローデータを登録
     """
-    api = twitter_common_service.prepare_twitter_api()
+    api = twitter_common_service.prepare_twitter_api(user_screen_name)
     follow_count = 0
     i = 0
     max_id = None
@@ -82,7 +82,7 @@ def follow_target_user(user_screen_name, status):
         print("{}は既にフォローしてたか、1年以内にフォローしたことあるからフォローしなかったよ".format(target_user_screen_name))
         return False
     # フォロー
-    api = twitter_common_service.prepare_twitter_api()
+    api = twitter_common_service.prepare_twitter_api(user_screen_name)
     follow_user(api, own_user_id, target_user_id)
     return True
 
@@ -109,8 +109,9 @@ def unfollow(user_screen_name, max_count):
     """
     指定したuser_screen_nameのユーザーで、上限max_countだけフォローを外していく。
     """
-    api = twitter_common_service.prepare_twitter_api()
+    api = twitter_common_service.prepare_twitter_api(user_screen_name)
     unfollow_count = 0
+    stop_second = 90
     max_count = int(max_count)
 
     user_opt = twitter_user_repository.search_user(user_screen_name)
@@ -125,9 +126,9 @@ def unfollow(user_screen_name, max_count):
         if unfollow_success:
             unfollow_count = unfollow_count + 1
             print('「{}」人アンフォローした'.format(str(unfollow_count)))
-            if unfollow_count % 5 == 0:
-                print('「{}」人一気にアンフォローしたから60秒待機...'.format(str(unfollow_count)))
-                timeutil_service.sleep(60)
+            if unfollow_count % 3 == 0:
+                print('「{}」人一気にアンフォローした...'.format(str(unfollow_count)))
+                timeutil_service.sleep(stop_second)
         # アンフォロー人数が上限に達したら処理終了
         if unfollow_count >= max_count:
             print('{}人アンフォロー完了したから処理終了'.format(str(unfollow_count)))
@@ -206,19 +207,25 @@ def create_tweet_list_text(statuses):
 ##################
 # ツイートDB保存処理
 ##################
-def collect_user_tweets(user_screen_name):
+def collect_user_tweets(user_screen_name, target_screen_name):
     """
     user_screen_name(@taroのtaroの部分)のTwitterユーザーのつぶやきを、現状の最新ツイートから古いツイートを順次DBに最大2000件登録
     """
+    pre_oldest_tweet_id = None
     # 連続でAPIアクセスするとAPIアクセス上限になるかもしれないから10回だけのループにしておく。
     for i in range(10):
         print('{}回目のループ開始'.format(str(i + 1)))
-        oldest_tweet_id = twitter_tweet_repository.search_oldest_tweet(user_screen_name)
-        user_id = twitter_tweet_repository.search_user_id(user_screen_name)
+        oldest_tweet_id = twitter_tweet_repository.search_oldest_tweet(target_screen_name)
+        # 2回以上ツイートが更新されなければ、最新のツイートがないということで処理終了
+        if (pre_oldest_tweet_id is not None) and pre_oldest_tweet_id == oldest_tweet_id:
+            print('最新ツイートもうないっぽかったから{}回目の検索前に処理終了'.format(str(i + 1)))
+            break
+
+        user_id = twitter_tweet_repository.search_user_id(target_screen_name)
         # 最新のつぶやきから200件ずつ検索してDB保存していく
         tweet_count = 0
         if oldest_tweet_id is None:
-            tweets = twitter_common_service.search_user_tweets(user_screen_name)
+            tweets = twitter_common_service.search_user_tweets(user_screen_name, target_screen_name)
             for tweet in tweets:
                 tweet_count = tweet_count + 1
                 try:
@@ -228,7 +235,7 @@ def collect_user_tweets(user_screen_name):
                     print("例外args:{}".format(e.args))
             # twitter_tweet_repository.add_tweets(user_id, tweets)
         else:
-            tweets = twitter_common_service.search_user_tweets_before(user_screen_name, oldest_tweet_id)
+            tweets = twitter_common_service.search_user_tweets_before(user_screen_name, target_screen_name, oldest_tweet_id)
             # twitter_tweet_repository.add_tweets(user_id, tweets)
             for tweet in tweets:
                 tweet_count = tweet_count + 1
@@ -238,8 +245,10 @@ def collect_user_tweets(user_screen_name):
                 except Exception as e:
                     print("例外args:{}".format(e.args))
 
+        pre_oldest_tweet_id = oldest_tweet_id
 
-def collect_user_tweets_diff(user_screen_name):
+
+def collect_user_tweets_diff(user_screen_name, target_screen_name):
     """
     user_screen_name(@taroのtaroの部分)のTwitterユーザーのつぶやきを、現状の最新ツイートから新しいツイートを順次DBに最大2000件登録
     APIアクセス数減らすため、DB保存対象となる最新ツイートがなくなれば処理終了する
@@ -250,17 +259,17 @@ def collect_user_tweets_diff(user_screen_name):
     for i in range(10):
 
         print('{}回目のループ開始'.format(str(i + 1)))
-        latest_tweet_id = twitter_tweet_repository.search_latest_tweet(user_screen_name)
+        latest_tweet_id = twitter_tweet_repository.search_latest_tweet(target_screen_name)
 
         # 2回以上ツイートが更新されなければ、最新のツイートがないということで処理終了
         if (pre_latest_tweet_id is not None) and pre_latest_tweet_id == latest_tweet_id:
             print('最新ツイートもうないっぽかったから{}回目の検索前に処理終了'.format(str(i + 1)))
             break
 
-        user_id = twitter_tweet_repository.search_user_id(user_screen_name)
+        user_id = twitter_tweet_repository.search_user_id(target_screen_name)
         # 最新のつぶやきから200件ずつ検索してDB保存していく
         if latest_tweet_id is None:
-            tweets = twitter_common_service.search_user_tweets(user_screen_name)
+            tweets = twitter_common_service.search_user_tweets(user_screen_name, target_screen_name)
             for tweet in tweets:
                 try:
                     twitter_tweet_repository.add_tweet(user_id, tweet.id, tweet.text, tweet.created_at)
@@ -268,10 +277,8 @@ def collect_user_tweets_diff(user_screen_name):
                     print('{}件目 tweet_id:{}のツイート登録完了'.format(insert_count, tweet.id))
                 except Exception as e:
                     print("例外args:{}".format(e.args))
-            # twitter_tweet_repository.add_tweets(user_id, tweets)
         else:
-            tweets = twitter_common_service.search_user_tweets_after(user_screen_name, latest_tweet_id)
-            # twitter_tweet_repository.add_tweets(user_id, tweets)
+            tweets = twitter_common_service.search_user_tweets_after(user_screen_name, target_screen_name, latest_tweet_id)
             for tweet in tweets:
                 try:
                     twitter_tweet_repository.add_tweet(user_id, tweet.id, tweet.text, tweet.created_at)
@@ -308,3 +315,31 @@ def dialogue_with_twitter_user(message, user_screen_name, text):
     """
     textに対しての返答として最適なものを、user_screen_nameのTwitterユーザーの持つテキストから選択してテキスト形式で返します。
     """
+
+
+##############################
+# 話題のつぶやきを検索してリツイート
+##############################
+def search_popular_tweet_and_retweet(user_screen_name, query):
+    """
+    user_screen_nameのTwitterユーザーでqueryで話題のつぶやきを探して引用リツイートする
+    """
+    # twitterのアクセス情報
+    api = twitter_common_service.prepare_twitter_api(user_screen_name)
+    search_results = twitter_common_service.search_tweet(api, query, 'popular', 100)
+
+    if len(search_results) == 0:
+        print('ツイート見つからなかったす。')
+        return
+
+    # いいね数の多い順のつぶやき一覧取得
+    statuses = twitter_common_service.sort_by_favorite_count(search_results, False)
+    # いいね数の多い1つのつぶやき取得
+    top_status_dictionary = twitter_common_service.select_statuses(statuses, 1)
+    for status in top_status_dictionary.values():
+        # リツイート文章作る
+        tweet_link = 'https://twitter.com/{}/status/{}'.format(status.user.screen_name, status.id)
+        comment = common_service.create_random_comment()
+        retweet_text = comment + '\n' + tweet_link
+        # リツイートする
+        api.update_status(status=retweet_text)

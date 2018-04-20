@@ -8,22 +8,27 @@ from repository import twitter_user_repository
 from repository import twitter_follow_repository
 
 
-# TwitterAPIを利用してデータ取得処理
-def prepare_twitter_api():
+# virtual-surferアカウントのTwitterAPIを用意
+def prepare_twitter_api(user_screen_name):
     """
     TwitterのAPIアクセスキーを取得
     """
-    auth = tweepy.OAuthHandler(os.environ['CONSUMER_KEY'], os.environ['CONSUMER_SECRET'])
-    auth.set_access_token(os.environ['ACCESS_TOKEN'], os.environ['ACCESS_TOKEN_SECRET'])
-    return tweepy.API(auth)
+    if user_screen_name == 'virtual_techX':
+        auth = tweepy.OAuthHandler(os.environ['CONSUMER_KEY'], os.environ['CONSUMER_SECRET'])
+        auth.set_access_token(os.environ['ACCESS_TOKEN'], os.environ['ACCESS_TOKEN_SECRET'])
+        return tweepy.API(auth)
+    elif user_screen_name == 'lcaichan18':
+        auth = tweepy.OAuthHandler(os.environ['LCAI_CONSUMER_KEY'], os.environ['LCAI_CONSUMER_SECRET'])
+        auth.set_access_token(os.environ['LCAI_ACCESS_TOKEN'], os.environ['LCAI_ACCESS_TOKEN_SECRET'])
+        return tweepy.API(auth)
 
 
-def search_user(user_screen_name):
+def search_user(user_screen_name, target_screen_name):
     """
     Twitterのuser_screen_name(@taroのtaroの部分)のユーザーを取得します。
     """
-    api = prepare_twitter_api()
-    return api.get_user(screen_name=user_screen_name)
+    api = prepare_twitter_api(user_screen_name)
+    return api.get_user(screen_name=target_screen_name)
 
 
 def search_tweet(api, word, result_type, count):
@@ -35,36 +40,36 @@ def search_tweet(api, word, result_type, count):
     return search_results
 
 
-def search_user_tweets(user_screen_name):
+def search_user_tweets(user_screen_name, target_screen_name):
     """
     user_screen_name(@taroのtaroの部分)のTwitterユーザーのつぶやきを200件取得します。
     """
-    api = prepare_twitter_api()
-    return api.user_timeline(screen_name=user_screen_name, count=200)
+    api = prepare_twitter_api(user_screen_name)
+    return api.user_timeline(screen_name=target_screen_name, count=200)
 
 
-def search_user_tweets_after(user_screen_name, since_id):
+def search_user_tweets_after(user_screen_name, target_screen_name, since_id):
     """
     Twitterのuser_screen_name(@taroのtaroの部分)のユーザーのつぶやきをsince_id以降で上限200件取得します。
     """
-    api = prepare_twitter_api()
-    return api.user_timeline(screen_name=user_screen_name, since_id=since_id, count=200)
+    api = prepare_twitter_api(user_screen_name)
+    return api.user_timeline(screen_name=target_screen_name, since_id=since_id, count=200)
 
 
-def search_user_tweets_before(user_screen_name, max_id):
+def search_user_tweets_before(user_screen_name, target_screen_name, max_id):
     """
     Twitterのuser_screen_name(@taroのtaroの部分)のユーザーのつぶやきをmax_id以前で上限200件取得します。
     """
-    api = prepare_twitter_api()
-    return api.user_timeline(screen_name=user_screen_name, max_id=max_id, count=200)
+    api = prepare_twitter_api(user_screen_name)
+    return api.user_timeline(screen_name=target_screen_name, max_id=max_id, count=200)
 
 
-def search_user_tweets_fromto(user_screen_name, since_id, max_id):
+def search_user_tweets_fromto(user_screen_name, target_screen_name, since_id, max_id):
     """
     Twitterのuser_screen_name(@taroのtaroの部分)のユーザーのつぶやきをsince_id以降、max_id以前のもので上限200件取得します。
     """
-    api = prepare_twitter_api()
-    return api.user_timeline(screen_name=user_screen_name, since_id=since_id, max_id=max_id, count=200)
+    api = prepare_twitter_api(user_screen_name)
+    return api.user_timeline(screen_name=target_screen_name, since_id=since_id, max_id=max_id, count=200)
 
 
 # つぶやき情報の並び替え/一部取得

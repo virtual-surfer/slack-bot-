@@ -1,4 +1,5 @@
 # coding=utf-8
+import random
 
 
 def select_dictionary(dictionary, count):
@@ -15,6 +16,23 @@ def select_dictionary(dictionary, count):
         if loop_count >= count:
             break
     return result_dictionary
+
+
+def create_random_comment():
+    """
+    適当なコメントをランダムに作成します。
+    """
+    random_comments = ['なるほど', '最近よく聞く', 'あんまり', '本当', '賛否両論', 'いい', 'う〜ん', 'どういうことだろ',
+                       'そういうこと', 'すごい', '初めて聞いた', 'すてき', 'そう', 'まだあまり知られてなさそう', 'たしかに', '...',
+                       'もういい', 'む〜', 'ふー', '今さら', 'でしょ', 'わかる', 'なんで', 'そう...', '速報', 'たしかに',
+                       'そんなバカな', 'まだまだ', 'いいじゃん', 'ですね', 'そんなこともあるよね', 'なんで', 'わからない', 'えええ',
+                       'やー', 'そんな日もある', 'いや', '神', '仕事', 'ダメ', 'セーフ', 'アウト', '悲しみ', '嬉しみ', 'ハイ']
+
+    random_end_of_words = ['( ^ω^ )', '( ? _ ? )', '(｡-_-｡)', '(O_O)', '(￣^￣)ゞ', '(-_-)zzz', '(・Д・)ノ', 'Σ(・□・；)',
+                           '⊂((・x・))⊃', '( ´ ▽ ` )ﾉ', '(>_<)', '(´Д` )', '( *｀ω´)', 'd(￣ ￣)', '(^^)', '＼(^o^)／',
+                           '(*_*)', '(OvO)', '(･_･;)' 'です', 'よね', 'だから', '?', '!', '', '', '', '笑', '...', '。',
+                           '!!', '!?', '??']
+    return random.choice(random_comments) + random.choice(random_end_of_words)
 
 
 def contain_dangerous_word(text):
