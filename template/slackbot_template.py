@@ -23,7 +23,7 @@ def search_popular_tweet_and_retweet(message, user_screen_name, query):
 
 @respond_to('reTweet (.*) (.*)')
 def search_popular_tweet_and_retweet(message, user_screen_name, query):
-    twitter_service.search_popular_tweet_and_retweet(user_screen_name, query)
+    twitter_service.search_popular_tweet_and_retweet(user_screen_name, query, 2)
 
 
 @respond_to('addTwitterUser (.*)')

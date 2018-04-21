@@ -21,12 +21,11 @@ from service import timeutil_service
 user_screen_name = 'lcaichan18'
 max_follow_count_every_other_day = 100
 max_unfollow_count_every_other_day = 100
-follow_target_word_list = ['読書', 'ビジネス書', '本好き', 'Amazon', 'タイムセール', 'ブログ', 'Kindle', 'Amazonプライム',
-                           '漫画', 'プログラミング', '本読む', 'book', '読書好き', 'Webデザイン', 'プログラミング初心者',
-                           'Webエンジニア', '図書館', '世田谷', '下北沢', 'ITベンチャー', 'startup', '起業', '投資',
-                           'デザイン', 'はてなブログ', 'Python', 'Ruby', 'Go', 'Java', 'Javascript', 'Node.js'
-                           'React', 'Angular', 'AR', 'VR', '吉祥寺', '左利きのエレン', 'note', '女子高生社長'
-                           '女子高生エンジニア', '女子高生デザイナー', '女子高生プログラマー']
+follow_target_word_list = ['プログラミング初心者', 'Webエンジニア', '下北沢', 'ITベンチャー', 'startup', '起業',
+                           'webデザイン', 'はてなブログ', '左利きのエレン', 'note', '女子高生社長', '女子高生エンジニア',
+                           '女子高生デザイナー', '女子高生プログラマー', '春茶', 'ハヤカワ五味', '池澤あやか', 'ちょまど',
+                           'りりそん', 'こばかな', 'りょかち', 'あんみつ（ラブグラフ）', 'はましゃか', ]
+retweet_count = 2
 
 # ##################################################################
 
@@ -57,9 +56,9 @@ def execute():
     # done 適当にツイート検索して引用リツイート
     # TODO: 話題の本に関してのつぶやきの引用リツイート
     if current_hour % 2 != 0 and current_hour != 19:
-        twitter_service.search_popular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list))
+        twitter_service.search_popular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list), retweet_count)
     # 指定時間にセール情報と新着情報
-    if current_hour == 11 or current_hour  == 15 or current_hour == 19:
+    if current_hour == 11 or current_hour == 15 or current_hour == 19:
         print('{} TODO3 current_hour:{}'.format(user_screen_name, current_hour))
 
     today = timeutil_service.current_datetime().day

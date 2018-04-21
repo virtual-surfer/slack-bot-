@@ -338,9 +338,9 @@ def dialogue_with_twitter_user(message, user_screen_name, text):
 ##############################
 # 話題のつぶやきを検索してリツイート
 ##############################
-def search_popular_tweet_and_retweet(user_screen_name, query):
+def search_popular_tweet_and_retweet(user_screen_name, query, retweet_count):
     """
-    user_screen_nameのTwitterユーザーでqueryで話題のつぶやきを探して引用リツイートする
+    user_screen_nameのTwitterユーザーでqueryで話題のつぶやきを探してretweet_count個引用リツイートする
     """
     # twitterのアクセス情報
     api = twitter_common_service.prepare_twitter_api(user_screen_name)
@@ -352,9 +352,9 @@ def search_popular_tweet_and_retweet(user_screen_name, query):
 
     # いいね数の多い順のつぶやき一覧取得
     statuses = twitter_common_service.sort_by_favorite_count(search_results, True)
-    # いいね数の多い1つのつぶやき取得
-    top_status_dictionary = twitter_common_service.select_statuses(statuses, 1)
-    for status in top_status_dictionary.values():
+    # いいね数の多いretweet_count個のつぶやき取得
+    top_statuses_dictionary = twitter_common_service.select_statuses(statuses, retweet_count)
+    for status in top_statuses_dictionary.values():
         # リツイート文章作る
         tweet_link = 'https://twitter.com/{}/status/{}'.format(status.user.screen_name, status.id)
         comment = common_service.create_random_comment()

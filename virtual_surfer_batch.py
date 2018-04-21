@@ -24,6 +24,7 @@ follow_target_word_list = ['プログラミング', 'プログラミング初心
                            'Angular', 'AR', 'VR', '機械学習', 'deep learning', 'MR', 'china tech', 'スタートアップ', '仮想通貨',
                            'MONA', 'monapy', 'もにゃ', 'xrp', 'XEM', 'NEM', 'ブロックチェーン', 'ETH', 'Ethereum', 'QSP',
                            'TRX', 'トロン', 'crypt currency', '仮想現実', 'Ripple', 'BTC', 'BCH', 'ビットコイン']
+retweet_count = 2
 
 # ##################################################################
 
@@ -54,7 +55,7 @@ def execute():
     # done 適当にツイート検索して引用リツイート
     # TODO: 話題のつぶやきの引用リツイート
     if current_hour % 2 != 0 and current_hour != 19:
-        twitter_service.search_popular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list))
+        twitter_service.search_popular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list), retweet_count)
     # 指定時間にセール情報と新着情報
     if current_hour == 11 or current_hour == 15 or current_hour == 19:
         print('{} TODO3 current_hour:{}'.format(user_screen_name, current_hour))
