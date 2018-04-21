@@ -43,17 +43,18 @@ def add_follow(friend_id, follower_id):
 
 
 # 更新処理
-def update_follow_delete_flg(friend_id, follower_id):
+def update_follow_delete_flg(friend_id, follower_id, is_delete):
     """
-    friend_idのユーザーのfollower_idのユーザーフォローを外す(delete_flgをTrueに更新)
+    friend_idのユーザーのfollower_idのユーザーフォロー状態を変更する(delete_flgをTrue or Falseに更新)
     :param friend_id: フォローユーザー
     :param follower_id: 被フォローユーザー
+    :param is_delete アンフォローフラグ
     """
     # トランザクション開始
     session = common_repository.create_session()
     # followレコード更新
     follow = TwitterFollow
-    update(follow).where(follow.friend_id == friend_id and follow.follower_id == follower_id).values(delete_flg=True, upd_datetime=datetime.now())
+    update(follow).where(follow.friend_id == friend_id and follow.follower_id == follower_id).values(delete_flg=is_delete, upd_datetime=datetime.now())
     print('friend_id:{}がfollower_id:{}をフォローしたことを削除(delete_flgをTrue)に更新しました'.format(follow.friend_id, follow.follower_id))
     # 変更をコミット
     session.commit()

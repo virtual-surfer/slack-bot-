@@ -23,6 +23,13 @@ def search_follow(user_screen_name, query, max_count):
     search_count = 100
     stop_second = 90
     max_count = int(max_count)
+    friend_ids = api.friends_ids(user_screen_name)
+
+    # 対象ユーザーがDBにまだ登録されていないなら登録する。
+    if twitter_user_repository.search_user(user_screen_name) is None:
+        print("user:{}はDBに登録されてなかったからDB登録するよ".format(user_screen_name))
+        search_insert_user(user_screen_name)
+        print("user:{}はDBに登録されてなかったからDB登録したよ".format(user_screen_name))
 
     for i in range(10):
         print('{}回目の検索'.format(str(i + 1)))
@@ -32,6 +39,9 @@ def search_follow(user_screen_name, query, max_count):
             search_results = api.search(q=query, count=search_count, max_id=max_id)
         for status in search_results:
             print('---------------------------------------')
+            if status.user.id in friend_ids:
+                print('user_id:{}はすでにフォローしてたからフォローしなかったよ'.format(status.user.id))
+                continue
             follow_success = follow_target_user(user_screen_name, status)
             if follow_success is True:
                 follow_count = follow_count + 1
@@ -65,21 +75,18 @@ def follow_target_user(user_screen_name, status):
         return False
     # user_screen_nameがDBに保存されていない場合はフォローしない
     own_user = twitter_user_repository.search_user(user_screen_name)
-    if own_user is None:
-        print("{}はDBに登録されてなかったよ".format(user_screen_name))
-        return False
     # プロフィールか自己紹介に公序良俗に反する言葉が含まれていた場合はフォローしない
     if common_service.contain_dangerous_word(status.user.name) or common_service.contain_dangerous_word(
             status.user.description):
         print("{}は公序良俗に反する言葉が含まれていたからフォローしなかったよ".format(status.user.screen_name))
         return False
-    # フォロー履歴が半年以内にあればフォローしない
+    # フォロー履歴が1年以内にあればフォローしない
     own_user_id = own_user.user_id
     target_user_id = status.user.id
     follow_opt = twitter_follow_repository.search_follow(own_user_id, target_user_id)
     year_ago = timeutil_service.culc_before_year(1)
     if (follow_opt is not None) and (follow_opt.upd_datetime > year_ago):
-        print("{}は既にフォローしてたか、1年以内にフォローしたことあるからフォローしなかったよ".format(target_user_screen_name))
+        print("{}は1年以内にフォローしたことあるからフォローしなかったよ".format(target_user_screen_name))
         return False
     # フォロー
     api = twitter_common_service.prepare_twitter_api(user_screen_name)
@@ -94,8 +101,16 @@ def follow_user(api, own_user_id, user_id):
     """
     try:
         api.create_friendship(user_id)
-        print('user_id{}でuser_id{}をフォローしたよ'.format(own_user_id, user_id))
-        twitter_follow_repository.add_follow(own_user_id, user_id)
+        print('user_id:{}でuser_id:{}をフォローしたよ'.format(own_user_id, user_id))
+        follow_opt = twitter_follow_repository.search_follow(own_user_id, user_id)
+        # 初めてのフォローの場合
+        if follow_opt is None:
+            twitter_follow_repository.add_follow(own_user_id, user_id)
+            print('user_id:{}でuser_id:{}を初めてフォローしたことをDB保存したよ'.format(own_user_id, user_id))
+        # 2度目以降のフォローの場合はdelete_flgをfalseに変更する
+        else:
+            twitter_follow_repository.update_follow_delete_flg(own_user_id, user_id, False)
+            print('user_id:{}でuser_id:{}を2回目以降のフォローしたことをDB保存したよ'.format(own_user_id, user_id))
         return True
     except Exception as e:
         print("例外args:{}".format(e.args))
@@ -109,17 +124,20 @@ def unfollow(user_screen_name, max_count):
     """
     指定したuser_screen_nameのユーザーで、上限max_countだけフォローを外していく。
     """
+    print('---------------- user:{}でアンフォロー処理開始'.format(user_screen_name))
     api = twitter_common_service.prepare_twitter_api(user_screen_name)
     unfollow_count = 0
     stop_second = 90
     max_count = int(max_count)
 
     user_opt = twitter_user_repository.search_user(user_screen_name)
+    # 対象ユーザーがDBにまだ登録されていないなら登録する。
     if user_opt is None:
-        print("{}はDBに登録されてなかったよ".format(user_screen_name))
-        return
-    own_user_id = user_opt.user_id
+        print("user:{}はDBに登録されてなかったからDB登録するよ".format(user_screen_name))
+        search_insert_user(user_screen_name)
+        user_opt = twitter_user_repository.search_user(user_screen_name)
 
+    own_user_id = user_opt.user_id
     friend_ids = api.friends_ids(user_screen_name)
     for friend_id in friend_ids:
         unfollow_success = unfollow_target_user(api, own_user_id, friend_id)
@@ -131,7 +149,7 @@ def unfollow(user_screen_name, max_count):
                 timeutil_service.sleep(stop_second)
         # アンフォロー人数が上限に達したら処理終了
         if unfollow_count >= max_count:
-            print('{}人アンフォロー完了したから処理終了'.format(str(unfollow_count)))
+            print('---------------- user:{}でアンフォロー処理終了(フォロー人数:{})'.format(user_screen_name, str(unfollow_count)))
             return
 
 
@@ -158,7 +176,7 @@ def unfollow_target_user(api, own_user_id, friend_id):
     try:
         api.destroy_friendship(friend_id)
         print("user_id:{}のフォロー外したよ".format(friend_id))
-        twitter_follow_repository.update_follow_delete_flg(own_user_id, friend_id)
+        twitter_follow_repository.update_follow_delete_flg(own_user_id, friend_id, True)
         return True
     except Exception as e:
         print("例外args:{}".format(e.args))
@@ -173,7 +191,7 @@ def unfollow_user(api, own_user_id, friend_id):
     try:
         api.destroy_friendship(friend_id)
         print("user_id:{}のフォロー外したよ".format(friend_id))
-        twitter_follow_repository.update_follow_delete_flg(own_user_id, friend_id)
+        twitter_follow_repository.update_follow_delete_flg(own_user_id, friend_id, True)
         return True
     except Exception as e:
         print("例外args:{}".format(e.args))

@@ -39,7 +39,7 @@ def contain_dangerous_word(text):
     """
     textに公序良俗違反にみなされそうな言葉が含まれていないかチェックする
     """
-    dangerous_words = ["暴力", "死", "エロ", "アダルト", "テロ", "殺", "えろ", "エッチ", "えっち"]
+    dangerous_words = ["暴力", "死", "エロ", "アダルト", "テロ", "殺", "えろ", "エッチ", "えっち", "AV"]
     for word in dangerous_words:
         if text.find(word) > 0:
             return True
