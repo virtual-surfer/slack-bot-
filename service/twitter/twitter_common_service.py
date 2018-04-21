@@ -21,6 +21,10 @@ def prepare_twitter_api(user_screen_name):
         auth = tweepy.OAuthHandler(os.environ['LCAI_CONSUMER_KEY'], os.environ['LCAI_CONSUMER_SECRET'])
         auth.set_access_token(os.environ['LCAI_ACCESS_TOKEN'], os.environ['LCAI_ACCESS_TOKEN_SECRET'])
         return tweepy.API(auth)
+    elif user_screen_name == 'furafura_nau':
+        auth = tweepy.OAuthHandler(os.environ['FURA_CONSUMER_KEY'], os.environ['FURA_CONSUMER_SECRET'])
+        auth.set_access_token(os.environ['FURA_ACCESS_TOKEN'], os.environ['FURA_ACCESS_TOKEN_SECRET'])
+        return tweepy.API(auth)
 
 
 def search_user(user_screen_name, target_screen_name):
