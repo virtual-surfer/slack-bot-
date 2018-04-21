@@ -26,14 +26,15 @@ def search_popular_tweet_and_retweet(message, user_screen_name, query):
     twitter_service.search_popular_tweet_and_retweet(user_screen_name, query, 2)
 
 
-@respond_to('addTwitterUser (.*)')
-def collect_user_tweet(message, user_screen_name):
+@respond_to('addTwitterUser (.*) (.*)')
+def collect_user_tweet(message, user_screen_name, target_screen_name):
     """
     指定したTwitterユーザーをDB登録する
     :param message: slackで受け取ったメンション
-    :param user_screen_name: TwitterユーザーのアカウントID
+    :param user_screen_name: 使用するTwitterユーザーのアカウントID
+    :param target_screen_name: 追加対象TwitterユーザーのアカウントID
     """
-    twitter_service.search_insert_user(user_screen_name)
+    twitter_service.search_insert_user(user_screen_name, target_screen_name)
 
 
 @respond_to('searchFollow (.*) (.*) (.*)')

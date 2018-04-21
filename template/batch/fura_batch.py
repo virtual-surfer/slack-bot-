@@ -28,7 +28,7 @@ follow_target_word_list = ['プログラミング', 'プログラミング初心
                            '伊藤周', '佐俣アンリ', 'DMM会長　亀山敬司', '家入一真 Kazuma Ieiri認証済みアカウント', '有安 伸宏',
                            'けんすう', 'Taiga( ●―● )', '楠木建', '池澤あやか / いけあや', '夏野 剛 Takeshi Natsuno', 'Yukihiro Matsumoto',
                            '猪子寿之 INOKO Toshiyuki']
-retweet_count = 2
+retweet_count = 1
 
 # ##################################################################
 

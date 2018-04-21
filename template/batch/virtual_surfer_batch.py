@@ -10,23 +10,21 @@ from service import timeutil_service
 # 本に関するつぶやき : 2時間ごと
 # アンフォロー : 2日に1回 18時
 # フォロー : 2日に1回 20時
-# 安い本の紹介 : 2時間ごと
-# 新着本の紹介 : 2時間ごと
-# メンション返信(最適な本のレコメンド) : 適宜(TODO:1日の上限は設ける)
+# メンション=いいね/リツイート=いいね or リツイートする : (TODO:1日の上限は設ける)
 
 # ##################################################################
 
 # ################## 各種変数(基本的にはここだけ触る) ##################
 
-user_screen_name = 'lcaichan18'
-max_follow_count_every_other_day = 100
-max_unfollow_count_every_other_day = 100
-# webデザイン / 女性
-follow_target_word_list = ['プログラミング初心者', 'Webエンジニア', '左利きのエレン', 'note', '女子高生社長', '女子高生エンジニア',
-                           '女子高生デザイナー', '女子高生プログラマー', '春茶', 'ハヤカワ五味', '池澤あやか', 'ちょまど', 'りりそん',
-                           'こばかな', 'りょかち', 'あんみつ（ラブグラフ）', 'はましゃか', '山科ティナ', 'はあちゅう', 'ocapiiii',
-                           'わなみん', 'ふくちっち', 'UX MILK', 'ᴀ ʏ ᴜ ᴘ ʏ｜後藤 あゆ', '笠井　知晶', 'のがちゃん']
-retweet_count = 2
+user_screen_name = 'virtual_techX'
+max_follow_count_every_other_day = 15
+max_unfollow_count_every_other_day = 15
+follow_target_word_list = ['プログラミング', 'プログラミング初心者', 'Webエンジニア', 'ITベンチャー', 'startup', '起業', '投資',
+                           'デザイン', 'はてなブログ', 'Python', 'Ruby', 'Go', 'Java', 'Javascript', 'Node.js', 'React',
+                           'Angular', 'AR', 'VR', '機械学習', 'deep learning', 'MR', 'china tech', 'スタートアップ', '仮想通貨',
+                           'MONA', 'monapy', 'もにゃ', 'xrp', 'XEM', 'NEM', 'ブロックチェーン', 'ETH', 'Ethereum', 'QSP',
+                           'TRX', 'トロン', 'crypt currency', '仮想現実', 'Ripple', 'BTC', 'BCH', 'ビットコイン']
+retweet_count = 1
 
 # ##################################################################
 
@@ -55,7 +53,7 @@ def execute():
         # twitter_service.search_unpopular_tweet_and_tweet(user_screen_name, random.choice(follow_target_word_list))
     # 奇数時間につぶやき
     # done 適当にツイート検索して引用リツイート
-    # TODO: 話題の本に関してのつぶやきの引用リツイート
+    # TODO: 話題のつぶやきの引用リツイート
     if current_hour % 2 != 0 and current_hour != 19:
         twitter_service.search_popular_tweet_and_retweet(user_screen_name, random.choice(follow_target_word_list), retweet_count)
     # 指定時間にセール情報と新着情報

@@ -28,7 +28,7 @@ def search_follow(user_screen_name, query, max_count):
     # 対象ユーザーがDBにまだ登録されていないなら登録する。
     if twitter_user_repository.search_user(user_screen_name) is None:
         print("user:{}はDBに登録されてなかったからDB登録するよ".format(user_screen_name))
-        search_insert_user(user_screen_name)
+        search_insert_user(user_screen_name, user_screen_name)
         print("user:{}はDBに登録されてなかったからDB登録したよ".format(user_screen_name))
 
     for i in range(10):
@@ -134,7 +134,7 @@ def unfollow(user_screen_name, max_count):
     # 対象ユーザーがDBにまだ登録されていないなら登録する。
     if user_opt is None:
         print("user:{}はDBに登録されてなかったからDB登録するよ".format(user_screen_name))
-        search_insert_user(user_screen_name)
+        search_insert_user(user_screen_name, user_screen_name)
         user_opt = twitter_user_repository.search_user(user_screen_name)
 
     own_user_id = user_opt.user_id
@@ -313,11 +313,11 @@ def collect_user_tweets_diff(user_screen_name, target_screen_name):
 ##################
 # ユーザーDB保存処理
 ##################
-def search_insert_user(user_screen_name):
+def search_insert_user(user_screen_name, target_screen_name):
     """
     user_screen_nameでTwitterユーザーを検索して、DBに保存します。
     """
-    user = twitter_common_service.search_user(user_screen_name)
+    user = twitter_common_service.search_user(user_screen_name, target_screen_name)
     print('{}をTwitterから取得できたよ'.format(user_screen_name))
     try:
         twitter_user_repository.add_user(user.id, user.screen_name, user.created_at)
